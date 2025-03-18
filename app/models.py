@@ -55,8 +55,8 @@ class Student(models.Model):
 
 class StudentBook(models.Model):
     id = models.BigAutoField(primary_key=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student_books', null=True)
+    book = models.ForeignKey(Book, related_name='student_books', on_delete=models.CASCADE, null=True)
     issue_date = models.DateField()
     return_date = models.DateField(blank=True, null=True)
     

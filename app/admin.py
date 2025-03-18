@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Book, Course, Department, Semester, Student
+from app.models import Book, Course, Department, Semester, Student, StudentBook
 
 # Register your models here.
 @admin.register(Department)
@@ -25,4 +25,8 @@ class BookAdmin(admin.ModelAdmin):
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['name', 'symbol', 'department', 'course', 'semester']
-    
+
+
+@admin.register(StudentBook)
+class StudentBookAdmin(admin.ModelAdmin):
+    list_display = ['student', 'book', 'issue_date', 'return_date']
