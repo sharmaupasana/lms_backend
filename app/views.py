@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from app.models import Course, Department, Student
-from app.serializers import CourseSerializer, DepartmentSerializer, StudentSerializer
+from app.models import Course, Department, Semester, Student
+from app.serializers import (CourseSerializer, DepartmentSerializer, SemesterSerializer,
+    StudentSerializer)
 
-# Create your views here.
+# Departments.
 @api_view(['GET'])
 def department(request):
     data = {
@@ -22,4 +23,43 @@ def deleteDepartment(request, givenId):
 def addDepartment(request):
     datas = request.data
     Department(name=datas['departmentName']).save()
+    return Response({'status': 200})
+
+@api_view(['POST'])
+def editDepartment(request):
+    datas = request.data
+    department = Department.objects.get(id=datas['departmentId'])
+    department.name = datas['departmentName']
+    department.save()
+    return Response({'status': 200})
+
+
+
+
+# Semester
+@api_view(['GET'])
+def semester(request):
+    data = {
+        'semesters': SemesterSerializer(Semester.objects.all(), many=True).data
+    }
+    return Response(data)
+
+@api_view(['GET'])
+def deleteSemester(request, givenId):
+    Semester.objects.get(id=givenId).delete()
+    return Response({'status': 200})
+
+@api_view(['POST'])
+def addSemester(request):
+    datas = request.data
+    Semester(name=datas['name'], symbol=datas['symbol']).save()
+    return Response({'status': 200})
+
+@api_view(['POST'])
+def editSemester(request):
+    datas = request.data
+    semester = Semester.objects.get(id=datas['id'])
+    semester.name = datas['name']
+    semester.symbol = datas['symbol']
+    semester.save()
     return Response({'status': 200})
