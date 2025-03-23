@@ -63,3 +63,31 @@ def editSemester(request):
     semester.symbol = datas['symbol']
     semester.save()
     return Response({'status': 200})
+
+
+
+
+# Course
+@api_view(['GET'])
+def course(request):
+    data = {
+        'departments': DepartmentSerializer(Department.objects.all(), many=True).data,
+        'semesters': SemesterSerializer(Semester.objects.all(), many=True).data,
+        'courses': CourseSerializer(Course.objects.all(), many=True).data
+    }
+    return Response(data)
+
+@api_view(['POST'])
+def addCourse(request):
+    datas = request.data
+    department = Department.objects.get(id = datas['department'])
+    semesters = Semester.objects.filter(id__in=datas['semesters'])
+    course = Course(name=datas['name'], department=department)
+    course.save()
+    course.semesters.set(semesters)
+    return Response({'status': 200})
+
+@api_view(['GET'])
+def deleteCourse(request, id):
+    Course.objects.get(id=id).delete()
+    return Response({'status': 200})
